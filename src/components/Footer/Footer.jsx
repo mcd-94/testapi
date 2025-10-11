@@ -2,7 +2,9 @@ import React from 'react'
 
 const Footer = () => {
   return (
-    <div className='border'>Footer</div>
+    <footer className='border rounded-md p-5 mt-5 flex justify-center items-center'>
+      Cool Footer
+    </footer>
   )
 }
 

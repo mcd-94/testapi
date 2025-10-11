@@ -5,12 +5,14 @@ import Footer from '@/components/Footer/Footer';
 
 const ClientLayout = ({ children }) => {
   return (
-     <>
-      <Header />
+    <>
 
+      <Header />
+        
       <div>{children}</div>
 
       <Footer />
+
     </>
   )
 }

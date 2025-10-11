@@ -1,8 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
-import burgerReducer from '@/store/burgerSlice'
+import startMenuReducer from '@/store/startMenuSlice'
+import themeReducer from '@/store/themeSlice'
 
 export const store = configureStore({
   reducer: {
-    burgerMenu: burgerReducer
+    startMenu: startMenuReducer,
+    theme: themeReducer, // <- ahora sí el slice del tema forma parte del store
   },
 })
+

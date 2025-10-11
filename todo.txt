@@ -1,0 +1,5 @@
+- Footer
+- Header con navegador
+
+- Paginas: homePage, contacto, about, booking
+- Tema claro y oscuro
