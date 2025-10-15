@@ -5,7 +5,12 @@ export default function Home() {
   return (
     <div>
       <main>
-        <Hero />
+        <Hero
+          title=''
+          bg="assets/heroBackgrounds/homePage.jpg"
+          logo="assets/branding/logoCompletoSF.png"
+          bookingButton="true"
+        />
       </main>
     </div>
   );

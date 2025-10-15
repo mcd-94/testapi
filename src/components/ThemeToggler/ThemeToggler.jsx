@@ -8,16 +8,16 @@ import { faMoon, faSun} from "@/lib/icons.js";
 
 
 const ThemeToggler = () => {
+
   const theme = useSelector((state) => state.theme.theme);
-  console.log(theme)
   const dispatch = useDispatch();
 
   return (
     <button
       onClick={() => dispatch(toggleTheme())}
-      className="rounded-md cursor-pointer border"
+      className="rounded-md cursor-pointer"
     >
-      <FontAwesomeIcon icon={theme === "light" ? faSun: faMoon} size="2x" />
+      <FontAwesomeIcon icon={theme === "light" ? faSun: faMoon} size="lg" />
     </button>
   );
 };

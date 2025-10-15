@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
     <StoreProvider>
       <html lang="es">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased p-5`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <ClientLayout>{children}</ClientLayout>
 

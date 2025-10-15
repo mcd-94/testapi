@@ -11,11 +11,15 @@ const StartMenuLauncher = () => {
   const dispatch = useDispatch();
 
   return (
-        <button
+      <button
         onClick={() => dispatch(toggleStartMenu())}
-        className='border px-3 py-1 rounded-md hover:border-red-500 cursor-pointer'>
-        <FontAwesomeIcon icon={startMenu === true ? faXmark: faBars} size="2x" />
-        </button>
+        className='flex justify-center items-center p-2 rounded-md cursor-pointer lg:hidden'
+      >
+        <span className="w-3 h-3 flex justify-center items-center">
+          <FontAwesomeIcon icon={startMenu ? faXmark : faBars} className='text-[1.5rem]' />
+        </span>
+
+      </button>
   );
 };
 
