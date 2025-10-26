@@ -17,9 +17,12 @@ import {
   faUserPlus,
   faUserMinus,
   faUserDoctor,
+  faUser,
+  faSignIn,
 } from "@fortawesome/free-solid-svg-icons";
 
 export {
+  faSignIn,
   faMoon,
   faSun,
   faEnvelope,
@@ -37,4 +40,5 @@ export {
   faUserPlus,
   faUserMinus,
   faUserDoctor,
+  faUser,
 };

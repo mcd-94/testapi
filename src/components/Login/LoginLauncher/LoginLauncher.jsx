@@ -1,39 +1,41 @@
 "use client";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faXmark } from "@/lib/icons.js";
+import { faUser, faSignIn, faXmark } from "@/lib/icons.js";
 
 import { useSelector, useDispatch } from "react-redux";
-import { toggleStartMenu } from "@/store/startMenuSlice";
 import { toggleLoginModal } from "@/store/loginModalSlice";
+import { closeStartMenu } from "@/store/startMenuSlice";
 
-const StartMenuLauncher = () => {
-  const startMenu = useSelector((state) => state.startMenu.isOpen);
+const LoginLauncher = ({ showIcon }) => {
   const loginModal = useSelector((state) => state.loginModal.isOpen);
+  const startMenu = useSelector((state) => state.startMenu.isOpen);
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    if (loginModal) {
+    if (startMenu) {
+      dispatch(closeStartMenu());
       dispatch(toggleLoginModal());
-      dispatch(toggleStartMenu());
     } else {
-      dispatch(toggleStartMenu());
+      dispatch(toggleLoginModal());
     }
   };
 
   return (
     <button
       onClick={handleClick}
-      className="flex justify-center items-center p-2 rounded-md cursor-pointer"
+      className="flex justify-center items-center rounded-md cursor-pointer"
     >
-      <span className="w-3 h-3 flex justify-center items-center">
+      {showIcon ? (
         <FontAwesomeIcon
-          icon={startMenu ? faXmark : faBars}
+          icon={loginModal ? faXmark : faUser}
           className="text-[1.5rem]"
         />
-      </span>
+      ) : (
+        "Log in"
+      )}
     </button>
   );
 };
 
-export default StartMenuLauncher;
+export default LoginLauncher;

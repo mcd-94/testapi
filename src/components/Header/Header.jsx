@@ -1,19 +1,28 @@
-'use client';
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
 import StartMenuLauncher from "@/components/StartMenu/StartMenuLauncher";
-import ThemeToggler from "@/components/ThemeToggler/ThemeToggler";
 import StartMenu from "@/components/StartMenu/StartMenu";
+import LoginLauncher from "@/components/Login/LoginLauncher/LoginLauncher";
+import LoginModal from "@/components/Login/LoginModal/LoginModal";
 import Link from "next/link";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setSession } from "@/store/userSessionSlice";
+import { faXmark, faUser } from "@/lib/icons.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMoon, faSun, faUsers} from "@/lib/icons.js";
+import { closeStartMenu } from "@/store/startMenuSlice";
 
 const Header = () => {
+  const dispatch = useDispatch();
   const startMenu = useSelector((state) => state.startMenu.isOpen);
+  const userSession = useSelector((state) => state.userSession.userSession);
+
+  // <-- Sincronizar Redux con sessionStorage al montar
+  useEffect(() => {
+    dispatch(setSession());
+  }, [dispatch]);
 
   return (
     <div className="flex flex-col fixed left-0 top-0 right-0 z-50">
-   
       <header
         className={`
           ${startMenu ? "rounded-t-md" : "rounded-md"}
@@ -29,30 +38,32 @@ const Header = () => {
           lg:p-2.5 lg:m-2.5 lg:mb-0
         `}
       >
-
-        <Link href="/">
-          <img src="/assets/branding/logoHeader.png" alt="Logo" className="h-10 w-auto" />
-        </Link>
-
         <StartMenuLauncher />
-        <nav className='hidden lg:block'>
-          <ul className='flex gap-20'>
-            <li><Link href='/about'>About</Link></li>
-            <li><Link href='/about'>About</Link></li>
-            <li><Link href='/about'>Contact</Link></li>
-            <li><Link href='/about'>Login</Link></li>
-          </ul>
-        </nav>
+        <Link href="/" onClick={() => dispatch(closeStartMenu())}>
+          <img
+            src="/assets/branding/logoHeader.png"
+            alt="Logo"
+            className="h-10 w-auto"
+          />
+        </Link>
+        {userSession ? (
+          <Link
+            href="/dashboard"
+            onClick={() => {
+              dispatch(closeStartMenu());
+            }}
+          >
+            <FontAwesomeIcon icon={faUser} className="text-[1.5rem]" />
+          </Link>
+        ) : (
+          <LoginLauncher showIcon={true} />
+        )}
       </header>
 
-      <div className={`
-        mx-1.5
-        sm:mx-2
-        lg:mx-2.5
-      `}>
-        <StartMenu/>
+      <div className="mx-1.5 sm:mx-2 lg:mx-2.5">
+        <StartMenu />
+        <LoginModal />
       </div>
-
     </div>
   );
 };

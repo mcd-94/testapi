@@ -1,78 +1,73 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
-import Turn from "@/models/Turn";
+import HealthInsurance from "@/models/HealthInsurance";
 
-// GET: obtener todos los turnos
+// GET: obtener todas las obras sociales
 export async function GET() {
   try {
     await connectDB();
-    const turns = await Turn.find().populate("doctor");
-    return NextResponse.json(turns);
+    const healthInsurances = await HealthInsurance.find();
+    return NextResponse.json(healthInsurances);
   } catch (err) {
     return NextResponse.json({ message: err.message }, { status: 500 });
   }
 }
 
-// POST: crear un nuevo turno
+// POST: crear una nueva obra social
 export async function POST(req) {
   try {
     await connectDB();
     const data = await req.json();
-    if (!data.doctor || !data.dateTime) {
+    if (!data.name?.trim()) {
       return NextResponse.json(
-        { message: "Doctor y fecha/hora son obligatorios" },
+        { message: "El nombre es obligatorio" },
         { status: 400 },
       );
     }
 
-    const newTurn = new Turn({
-      doctor: data.doctor,
-      dateTime: new Date(data.dateTime),
-      available: data.available !== undefined ? data.available : true,
+    const newHI = new HealthInsurance({
+      name: data.name,
+      description: data.description || "",
     });
 
-    const savedTurn = await newTurn.save();
-    return NextResponse.json(savedTurn, { status: 201 });
+    const savedHI = await newHI.save();
+    return NextResponse.json(savedHI, { status: 201 });
   } catch (err) {
     return NextResponse.json({ message: err.message }, { status: 500 });
   }
 }
 
-// PATCH: actualizar turno
+// PATCH: actualizar obra social
 export async function PATCH(req) {
   try {
     await connectDB();
     const data = await req.json();
-    if (!data.id || !data.doctor || !data.dateTime) {
+    if (!data.id || !data.name?.trim()) {
       return NextResponse.json(
-        { message: "ID, doctor y fecha/hora son obligatorios" },
+        { message: "ID y nombre son obligatorios" },
         { status: 400 },
       );
     }
 
-    const updatedTurn = await Turn.findByIdAndUpdate(
+    const updatedHI = await HealthInsurance.findByIdAndUpdate(
       data.id,
-      {
-        doctor: data.doctor,
-        dateTime: new Date(data.dateTime),
-        available: data.available !== undefined ? data.available : true,
-      },
+      { name: data.name, description: data.description || "" },
       { new: true },
     );
 
-    if (!updatedTurn)
+    if (!updatedHI)
       return NextResponse.json(
-        { message: "Turno no encontrado" },
+        { message: "Obra social no encontrada" },
         { status: 404 },
       );
 
-    return NextResponse.json(updatedTurn);
+    return NextResponse.json(updatedHI);
   } catch (err) {
     return NextResponse.json({ message: err.message }, { status: 500 });
   }
 }
 
-// DELETE: eliminar turno
+// DELETE: eliminar obra social
 export async function DELETE(req) {
   try {
     await connectDB();
@@ -83,14 +78,16 @@ export async function DELETE(req) {
         { status: 400 },
       );
 
-    const deletedTurn = await Turn.findByIdAndDelete(id);
-    if (!deletedTurn)
+    const deletedHI = await HealthInsurance.findByIdAndDelete(id);
+    if (!deletedHI)
       return NextResponse.json(
-        { message: "Turno no encontrado" },
+        { message: "Obra social no encontrada" },
         { status: 404 },
       );
 
-    return NextResponse.json({ message: "Turno eliminado correctamente" });
+    return NextResponse.json({
+      message: "Obra social eliminada correctamente",
+    });
   } catch (err) {
     return NextResponse.json({ message: err.message }, { status: 500 });
   }

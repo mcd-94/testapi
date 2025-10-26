@@ -1,57 +1,21 @@
-// import mongoose from "mongoose";
-//
-// const DoctorSchema = new mongoose.Schema({
-//
-// // _id, que asumo que será generado por MongoDB "automaticamente".
-//   licenseNumber: Number,
-//   name: 
-//   {
-//     given: {
-//     },
-//     last: {
-//
-//     },
-//   },
-//   specialty: String,
-//   description: String,
-//   healthInsurances: {
-//
-//   }// FK from healthInsurances,
-//   ,
-//
-// });
-//
-// export default mongoose.models.Doctor || mongoose.model("Doctor", DoctorSchema);
-//
-  //
+// models/doctor.js
+
 import mongoose from "mongoose";
 
-const DoctorSchema = new mongoose.Schema({
-  // MongoDB automatically generates _id
-  licenseNumber: { type: Number, required: true },
-
-  name: {
-    given: { type: String, required: true },
-    last: { type: String, required: true },
+const doctorSchema = new mongoose.Schema(
+  {
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    licenseNumber: { type: Number },
+    description: { type: String },
+    email: { type: String },
+    phone: { type: String },
+    specialty: [{ type: mongoose.Schema.Types.ObjectId, ref: "Specialty" }],
+    healthInsurances: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "HealthInsurance" },
+    ],
   },
+  { timestamps: true },
+);
 
-  specialty: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: "Specialty", // reference to the Specialties collection
-    required: true 
-  },
-
-  description: { type: String },
-
-  healthInsurances: [
-    { 
-      type: mongoose.Schema.Types.ObjectId, 
-      ref: "HealthInsurance" // reference to the Health Insurances collection
-    }
-  ],
-
-  photo: { type: String }, // Base64 string
-  consultationFee: { type: mongoose.Decimal128, required: true },
-});
-
-export default mongoose.models.Doctor || mongoose.model("Doctor", DoctorSchema);
+export default mongoose.models.Doctor || mongoose.model("Doctor", doctorSchema);

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const SpecialtySchema = new mongoose.Schema(
+const HealthInsuranceSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, unique: true },
     description: { type: String, default: "" },
@@ -8,5 +8,5 @@ const SpecialtySchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-export default mongoose.models.Specialty ||
-  mongoose.model("Specialty", SpecialtySchema);
+export default mongoose.models.HealthInsurance ||
+  mongoose.model("HealthInsurance", HealthInsuranceSchema);

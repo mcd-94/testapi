@@ -1,14 +1,17 @@
-const HealthInsuranceProviderSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  description: {
-    type: String,
-    trim: true,
-  },
-});
+import mongoose from "mongoose";
 
-export default mongoose.models.HealthInsuranceProvider ||
-  mongoose.model("HealthInsuranceProvider", HealthInsuranceProviderSchema);
+const HealthInsuranceSchema = new mongoose.Schema(
+  {
+    id: { type: Number, required: true, unique: true },
+    name: { type: String, required: true, unique: true },
+    description: { type: String, default: "" },
+    contact: {
+      phone: { type: String, default: "" },
+      email: { type: String, default: "" },
+    },
+  },
+  { timestamps: true },
+);
+
+export default mongoose.models.HealthInsurance ||
+  mongoose.model("HealthInsurance", HealthInsuranceSchema);
