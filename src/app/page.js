@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Hero from "@/components/Hero/Hero";
 import Card from "@/components/Card/Card";
-import ImageToBase64 from "@/components/ImageToBase64/ImageToBase64";
 export default function Home() {
   const [specialties, setSpecialties] = useState([]);
   const [healthInsurances, setHealthInsurances] = useState([]);
@@ -46,7 +45,7 @@ export default function Home() {
         />
         <section className="p-6">
           <header className="mb-4 flex flex-col gap-1">
-            <h2 className="text-3xl font-semibold text-[#3478a2]">
+            <h2 className="text-3xl md:text-center font-semibold text-[#3478a2]">
               Servicios Médicos
             </h2>
             <p className="text-xl text-gray-600">
@@ -72,7 +71,7 @@ export default function Home() {
         </section>
         <section className="p-6">
           <header className="mb-4 flex flex-col gap-1">
-            <h2 className="text-3xl font-semibold text-[#3478a2]">
+            <h2 className="text-3xl md:text-center font-semibold text-[#3478a2]">
               Obras Sociales
             </h2>
             <p className="text-xl text-gray-600">
