@@ -15,11 +15,13 @@ export default function DoctorsCrud() {
     firstName: "",
     lastName: "",
     licenseNumber: "",
-    description: "",
     email: "",
     phone: "",
     specialty: [],
     healthInsurances: [],
+    description: "",
+    consultationFee: "",
+    image: "",
   });
   const [editingDoctorData, setEditingDoctorData] = useState(null);
 
@@ -77,11 +79,13 @@ export default function DoctorsCrud() {
       firstName: "",
       lastName: "",
       licenseNumber: "",
-      description: "",
       email: "",
       phone: "",
       specialty: [],
       healthInsurances: [],
+      description: "",
+      consultationFee: "",
+      image: "",
     });
   }
 
@@ -134,18 +138,23 @@ export default function DoctorsCrud() {
       return;
     }
 
+    if (!newDoctor.consultationFee || !newDoctor.licenseNumber) {
+      alert("Nombre, apellido y matricula son obligatorios");
+      return;
+    }
+
     try {
       const payload = {
         firstName: newDoctor.firstName.trim(),
         lastName: newDoctor.lastName.trim(),
-        licenseNumber: newDoctor.licenseNumber
-          ? Number(newDoctor.licenseNumber)
-          : undefined,
+        licenseNumber: newDoctor.licenseNumber,
+        consultationFee: newDoctor.consultationFee,
         description: newDoctor.description || "",
         email: newDoctor.email?.trim() || "",
         phone: newDoctor.phone?.trim() || "",
         specialty: newDoctor.specialty,
         healthInsurances: newDoctor.healthInsurances,
+        image: newDoctor.image || "",
       };
 
       const res = await fetch("/doctors", {
@@ -174,14 +183,14 @@ export default function DoctorsCrud() {
         id: editingDoctorData._id,
         firstName: editingDoctorData.firstName.trim(),
         lastName: editingDoctorData.lastName.trim(),
-        licenseNumber: editingDoctorData.licenseNumber
-          ? Number(editingDoctorData.licenseNumber)
-          : undefined,
+        licenseNumber: editingDoctorData.licenseNumber,
         description: editingDoctorData.description.trim(),
         email: editingDoctorData.email?.trim() || "",
         phone: editingDoctorData.phone?.trim() || "",
         specialty: editingDoctorData.specialty,
         healthInsurances: editingDoctorData.healthInsurances,
+        consultationFee: editingDoctorData.consultationFee,
+        image: editingDoctorData.image || "",
       };
 
       const res = await fetch("/doctors", {
@@ -316,6 +325,7 @@ export default function DoctorsCrud() {
               <th className="border px-4 py-2">Descripción</th>
               <th className="border px-4 py-2">Especialidades</th>
               <th className="border px-4 py-2">Obras Sociales</th>
+              <th className="border px-4 py-2">Precio de consulta</th>
               <th className="border px-4 py-2">Acciones</th>
             </tr>
           </thead>
@@ -350,6 +360,7 @@ export default function DoctorsCrud() {
                       ? doctor.healthInsurances.map((h) => h.name).join(", ")
                       : "-"}
                   </td>
+                  <td className="border px-2 py-1">{doctor.consultationFee}</td>
                   <td className="border px-2 py-1 flex gap-1">
                     <button
                       onClick={() => openEditModal(doctor)}

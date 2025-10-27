@@ -28,6 +28,7 @@ export async function POST(req) {
 
     const name = data.name.trim();
     const description = data.description?.trim() || "";
+    const image = data.image?.trim() || "";
 
     const exists = await Specialty.findOne({ name });
     if (exists) {
@@ -37,7 +38,7 @@ export async function POST(req) {
       );
     }
 
-    const specialty = new Specialty({ name, description });
+    const specialty = new Specialty({ name, description, image });
     const saved = await specialty.save();
 
     return NextResponse.json(JSON.parse(JSON.stringify(saved)), {
@@ -60,7 +61,11 @@ export async function PATCH(req) {
 
     const updated = await Specialty.findByIdAndUpdate(
       id,
-      { name: data.name?.trim(), description: data.description?.trim() || "" },
+      {
+        name: data.name?.trim(),
+        description: data.description?.trim() || "",
+        image: data.image?.trim(),
+      },
       { new: true, runValidators: true },
     );
 

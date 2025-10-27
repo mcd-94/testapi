@@ -48,6 +48,14 @@ export default function CreateDoctorModal({
           placeholder="Teléfono"
           className="block w-full mb-2 p-2 border rounded"
         />
+        <input
+          name="consultationFee"
+          value={newDoctor.consultationFee}
+          onChange={handleChange}
+          placeholder="Precio por consulta"
+          className="block w-full mb-2 p-2 border rounded"
+        />
+
         <textarea
           name="description"
           value={newDoctor.description}
@@ -87,7 +95,31 @@ export default function CreateDoctorModal({
             </label>
           ))}
         </div>
-
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              // Actualiza el campo 'image' en el objeto del doctor
+              handleChange({
+                target: { name: "image", value: reader.result, type: "text" },
+              });
+            };
+            reader.readAsDataURL(file);
+          }}
+          className="block w-full mb-2 p-2 border rounded"
+        />
+        {/* Optional image preview */}
+        {newDoctor.image && (
+          <img
+            src={newDoctor.image}
+            alt="Vista previa"
+            className="w-32 h-32 object-cover rounded mb-2"
+          />
+        )}
         <div className="flex justify-end gap-2 mt-4">
           <button
             onClick={handleCreate}

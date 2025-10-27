@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Hero from "@/components/Hero/Hero";
 import Card from "@/components/Card/Card";
-
+import ImageToBase64 from "@/components/ImageToBase64/ImageToBase64";
 export default function Home() {
   const [specialties, setSpecialties] = useState([]);
 
@@ -44,7 +44,12 @@ export default function Home() {
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {specialties.length > 0 ? (
               specialties.map((e) => (
-                <Card key={e._id} name={e.name} description={e.description} />
+                <Card
+                  key={e._id}
+                  title={e.name}
+                  description={e.description}
+                  image={e.image}
+                />
               ))
             ) : (
               <p>Cargando especialidades...</p>

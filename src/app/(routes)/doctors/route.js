@@ -25,14 +25,14 @@ export async function POST(req) {
     const {
       firstName,
       lastName,
-      specialty,
-      healthInsurances,
+      licenseNumber,
       email,
       phone,
-      licenseNumber,
+      specialty,
+      healthInsurances,
       description,
       consultationFee,
-      photo,
+      image,
     } = body;
 
     if (!firstName?.trim() || !lastName?.trim()) {
@@ -45,6 +45,13 @@ export async function POST(req) {
     if (licenseNumber === undefined || licenseNumber === null) {
       return NextResponse.json(
         { message: "licenseNumber es obligatorio" },
+        { status: 400 },
+      );
+    }
+
+    if (consultationFee === undefined || consultationFee === null) {
+      return NextResponse.json(
+        { message: "consultationFee es obligatorio" },
         { status: 400 },
       );
     }
@@ -69,13 +76,13 @@ export async function POST(req) {
       firstName: firstName.trim(),
       lastName: lastName.trim(),
       licenseNumber: Number(licenseNumber),
-      description: description || "",
-      email: email?.trim() || "",
       phone: phone?.trim() || "",
-      consultationFee: Number(consultationFee) || 0,
-      photo: photo || "",
+      email: email?.trim() || "",
       specialty: specialtyIds,
       healthInsurances: healthIds,
+      description: description || "",
+      consultationFee: Number(consultationFee) || 0,
+      image: image || "",
     });
 
     const savedDoctor = await newDoctor.save();
@@ -99,19 +106,28 @@ export async function PATCH(req) {
       id,
       firstName,
       lastName,
+      licenseNumber,
+      phone,
+      email,
       specialty,
       healthInsurances,
-      email,
-      phone,
-      licenseNumber,
       description,
       consultationFee,
-      photo,
+      image,
     } = body;
 
-    if (!id || !firstName?.trim() || !lastName?.trim()) {
+    if (
+      !id ||
+      !firstName?.trim() ||
+      !lastName?.trim() ||
+      !consultationFee ||
+      !licenseNumber
+    ) {
       return NextResponse.json(
-        { message: "ID, firstName y lastName son obligatorios" },
+        {
+          message:
+            "ID, firstName, lastName, licenseNumber y consultationFee son obligatorios",
+        },
         { status: 400 },
       );
     }
@@ -137,16 +153,15 @@ export async function PATCH(req) {
       {
         firstName: firstName.trim(),
         lastName: lastName.trim(),
-        licenseNumber:
-          licenseNumber !== undefined ? Number(licenseNumber) : undefined,
-        description: description || "",
-        email: email?.trim() || "",
+        licenseNumber: licenseNumber,
         phone: phone?.trim() || "",
-        consultationFee:
-          consultationFee !== undefined ? Number(consultationFee) : 0,
-        photo: photo || "",
+        email: email?.trim() || "",
         specialty: specialtyIds,
         healthInsurances: healthIds,
+        description: description || "",
+        consultationFee:
+          consultationFee !== undefined ? Number(consultationFee) : 0,
+        image: image || "",
       },
       { new: true, runValidators: true },
     )

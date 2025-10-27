@@ -3,3 +3,401 @@
 
 - Paginas: homePage, contacto, about, booking
 - Tema claro y oscuro
+A continuación detallare de la mejor forma que pueda el contexto y los requerimientos.
+
+Actualmente, con mi arquitectura, puedo guardar datos en una base de datos MongoDB para mi web app de Next JS.
+
+En esa base de datos existe una colección "specialties".
+specialties guarda datos en base al siguiente esquema:
+
+// /src/models/specialty.js
+
+import mongoose from "mongoose";
+
+const SpecialtySchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true, unique: true },
+    description: { type: String, default: "" },
+  },
+  { timestamps: true },
+);
+
+export default mongoose.models.Specialty ||
+  mongoose.model("Specialty", SpecialtySchema);
+
+
+// La base de datos se consume mediante endpoints/routes.
+
+// Para operar con specialties, y con cualquier colección, hay que comunicarse con la ruta/endpoint.
+// En este projecto, eso se define /app/(routes)/COLECCION/route.js
+
+// Para consumir la coleccion specialties, tenemos un endpoint definido en /src/app/(routes)/specialties/route.js
+// No se utiliza /api/specialties, como se solía hacer antes en Next JS.
+// Esto funciona con app/(routes)/specialties/route.js y debe permanecer así.
+
+// He aqui dicho endpoint:
+
+
+// app/(routes)/specialties/route.js
+
+import { NextResponse } from "next/server";
+import Specialty from "@/models/specialty";
+import { connectDB } from "@/lib/mongodb";
+
+export async function GET() {
+  try {
+    await connectDB();
+    const specialties = await Specialty.find();
+    return NextResponse.json(JSON.parse(JSON.stringify(specialties)));
+  } catch (err) {
+    console.error("❌ Error en GET /specialties:", err);
+    return NextResponse.json({ message: err.message }, { status: 500 });
+  }
+}
+
+export async function POST(req) {
+  try {
+    await connectDB();
+    const data = await req.json();
+
+    if (!data?.name?.trim()) {
+      return NextResponse.json(
+        { message: "Nombre obligatorio" },
+        { status: 400 },
+      );
+    }
+
+    const name = data.name.trim();
+    const description = data.description?.trim() || "";
+
+    const exists = await Specialty.findOne({ name });
+    if (exists) {
+      return NextResponse.json(
+        { message: "Ya existe esa especialidad" },
+        { status: 400 },
+      );
+    }
+
+    const specialty = new Specialty({ name, description });
+    const saved = await specialty.save();
+
+    return NextResponse.json(JSON.parse(JSON.stringify(saved)), {
+      status: 201,
+    });
+  } catch (err) {
+    console.error("❌ Error creando especialidad:", err);
+    return NextResponse.json({ message: err.message }, { status: 500 });
+  }
+}
+
+export async function PATCH(req) {
+  try {
+    await connectDB();
+    const data = await req.json();
+    const id = data._id || data.id;
+
+    if (!id)
+      return NextResponse.json({ message: "ID obligatorio" }, { status: 400 });
+
+    const updated = await Specialty.findByIdAndUpdate(
+      id,
+      { name: data.name?.trim(), description: data.description?.trim() || "" },
+      { new: true, runValidators: true },
+    );
+
+    if (!updated)
+      return NextResponse.json(
+        { message: "Especialidad no encontrada" },
+        { status: 404 },
+      );
+
+    return NextResponse.json(JSON.parse(JSON.stringify(updated)));
+  } catch (err) {
+    console.error("❌ Error en PATCH /specialties:", err);
+    return NextResponse.json({ message: err.message }, { status: 500 });
+  }
+}
+
+export async function DELETE(req) {
+  try {
+    await connectDB();
+    const { id } = await req.json();
+
+    if (!id)
+      return NextResponse.json({ message: "ID obligatorio" }, { status: 400 });
+
+    const deleted = await Specialty.findByIdAndDelete(id);
+
+    if (!deleted)
+      return NextResponse.json(
+        { message: "Especialidad no encontrada" },
+        { status: 404 },
+      );
+
+    return NextResponse.json({
+      message: "Especialidad eliminada correctamente",
+    });
+  } catch (err) {
+    console.error("❌ Error en DELETE /specialties:", err);
+    return NextResponse.json({ message: err.message }, { status: 500 });
+  }
+}
+
+Se hace un crud de las specialties en /src/components/SpecialtiesCrud/SpecialtiesCrud.jsx:
+
+"use client";
+
+import { useEffect, useState } from "react";
+
+export default function SpecialtiesCrud() {
+  const [specialties, setSpecialties] = useState([]);
+  const [editingId, setEditingId] = useState(null);
+  const [formData, setFormData] = useState({ name: "", description: "" });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const [showModal, setShowModal] = useState(false);
+  const [newSpecialty, setNewSpecialty] = useState({
+    name: "",
+    description: "",
+  });
+
+  // Obtener especialidades
+  useEffect(() => {
+    fetchSpecialties();
+  }, []);
+
+  async function fetchSpecialties() {
+    try {
+      setLoading(true);
+      const res = await fetch("/specialties");
+      if (!res.ok) throw new Error("Error al obtener especialidades");
+      const data = await res.json();
+      setSpecialties(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // --- Edición existente ---
+  function handleEdit(specialty) {
+    setEditingId(specialty._id);
+    setFormData({
+      name: specialty.name,
+      description: specialty.description || "",
+    });
+  }
+
+  function handleCancel() {
+    setEditingId(null);
+    setFormData({ name: "", description: "" });
+  }
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  }
+
+  async function handleSave(id) {
+    try {
+      const res = await fetch("/specialties", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, ...formData }),
+      });
+      if (!res.ok) throw new Error("Error al actualizar la especialidad");
+      await fetchSpecialties();
+      handleCancel();
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
+  async function handleDelete(id) {
+    if (!confirm("¿Seguro que deseas eliminar esta especialidad?")) return;
+    try {
+      const res = await fetch("/specialties", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+      if (!res.ok) throw new Error("Error al eliminar la especialidad");
+      await fetchSpecialties();
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
+  // --- Modal de creación ---
+  function openModal() {
+    setShowModal(true);
+    setNewSpecialty({ name: "", description: "" });
+  }
+
+  function closeModal() {
+    setShowModal(false);
+  }
+
+  function handleNewSpecialtyChange(e) {
+    const { name, value } = e.target;
+    setNewSpecialty((prev) => ({ ...prev, [name]: value }));
+  }
+
+  async function handleCreateSpecialty() {
+    if (!newSpecialty.name.trim()) {
+      alert("El nombre es obligatorio");
+      return;
+    }
+
+    try {
+      const res = await fetch("/specialties", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newSpecialty),
+      });
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Error al crear la especialidad");
+      }
+      await fetchSpecialties();
+      closeModal();
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
+  if (loading) return <p>Cargando especialidades...</p>;
+  if (error) return <p>Error: {error}</p>;
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold">Lista de Especialidades</h1>
+        <button
+          onClick={openModal}
+          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+        >
+          Crear nueva especialidad
+        </button>
+      </div>
+
+      <ul className="space-y-4">
+        {specialties.map((spec) => (
+          <li
+            key={spec._id}
+            className="p-4 border rounded-lg shadow-sm bg-white dark:bg-gray-800"
+          >
+            {editingId === spec._id ? (
+              <>
+                <input
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Nombre"
+                  className="block w-full mb-2 p-2 border rounded"
+                />
+                <input
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  placeholder="Descripción"
+                  className="block w-full mb-2 p-2 border rounded"
+                />
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handleSave(spec._id)}
+                    className="px-3 py-1 bg-green-600 text-white rounded"
+                  >
+                    Guardar
+                  </button>
+                  <button
+                    onClick={handleCancel}
+                    className="px-3 py-1 bg-gray-400 text-white rounded"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <h2 className="text-xl font-semibold">{spec.name}</h2>
+                <p className="text-gray-600 dark:text-gray-300">
+                  {spec.description || "No especificada"}
+                </p>
+                <div className="flex gap-2 mt-2">
+                  <button
+                    onClick={() => handleEdit(spec)}
+                    className="px-3 py-1 bg-blue-600 text-white rounded"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => handleDelete(spec._id)}
+                    className="px-3 py-1 bg-red-600 text-white rounded"
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              </>
+            )}
+          </li>
+        ))}
+      </ul>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white dark:bg-gray-900 rounded-lg p-6 shadow-lg w-96">
+            <h2 className="text-2xl font-bold mb-4">
+              Crear nueva especialidad
+            </h2>
+            <input
+              name="name"
+              value={newSpecialty.name}
+              onChange={handleNewSpecialtyChange}
+              placeholder="Nombre"
+              className="block w-full mb-2 p-2 border rounded"
+            />
+            <input
+              name="description"
+              value={newSpecialty.description}
+              onChange={handleNewSpecialtyChange}
+              placeholder="Descripción (opcional)"
+              className="block w-full mb-4 p-2 border rounded"
+            />
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={handleCreateSpecialty}
+                className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+              >
+                Crear
+              </button>
+              <button
+                onClick={closeModal}
+                className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+Todo esto funciona actualmente.
+
+Explicame lo que entendiste y luego te dire como proseguir.
+
+
+Ahora quiero poder guardar en esa coleccion, specialties, imagenes.
+
+Hay que modificar el esquema de specialty para que pueda guardar imagenes.
+Esas imagenes deben poder subirse desde el frontend, desde SpecialtiesCrud, como las otras propiedades.
+Uno debe poder subir imagenes.
+
+Me imagino que hay que adecuar tambien los metodos de la ruta (routes)/specialties/route.js

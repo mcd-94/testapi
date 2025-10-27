@@ -5,7 +5,11 @@ import { useEffect, useState } from "react";
 export default function SpecialtiesCrud() {
   const [specialties, setSpecialties] = useState([]);
   const [editingId, setEditingId] = useState(null);
-  const [formData, setFormData] = useState({ name: "", description: "" });
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    image: "",
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -13,6 +17,7 @@ export default function SpecialtiesCrud() {
   const [newSpecialty, setNewSpecialty] = useState({
     name: "",
     description: "",
+    image: "",
   });
 
   // Obtener especialidades
@@ -40,12 +45,13 @@ export default function SpecialtiesCrud() {
     setFormData({
       name: specialty.name,
       description: specialty.description || "",
+      image: specialty.image || "",
     });
   }
 
   function handleCancel() {
     setEditingId(null);
-    setFormData({ name: "", description: "" });
+    setFormData({ name: "", description: "", image: "" });
   }
 
   function handleChange(e) {
@@ -86,7 +92,7 @@ export default function SpecialtiesCrud() {
   // --- Modal de creación ---
   function openModal() {
     setShowModal(true);
-    setNewSpecialty({ name: "", description: "" });
+    setNewSpecialty({ name: "", description: "", image: "" });
   }
 
   function closeModal() {
@@ -115,6 +121,7 @@ export default function SpecialtiesCrud() {
         throw new Error(errorData.message || "Error al crear la especialidad");
       }
       await fetchSpecialties();
+      console.log(res.body);
       closeModal();
     } catch (err) {
       alert(err.message);
@@ -158,6 +165,47 @@ export default function SpecialtiesCrud() {
                   placeholder="Descripción"
                   className="block w-full mb-2 p-2 border rounded"
                 />
+                {/*
+                Este input actualmente toma texto.
+                Yo quiero que el usuario pueda elegir una imagen de su sistema,
+                que la imagen se convierta en Base64 y guardar ese string en value={formData.image}
+
+                <input
+                  name="image"
+                  value={formData.image}
+                  onChange={handleChange}
+                  placeholder="Imágen"
+                  className="block w-full mb-2 p-2 border rounded"
+                />
+                */}
+                {/* Imagen (Base64 upload) */}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        image: reader.result,
+                      }));
+                    };
+                    reader.readAsDataURL(file);
+                  }}
+                  className="block w-full mb-2 p-2 border rounded"
+                />
+
+                {/* Optional image preview */}
+                {formData.image && (
+                  <img
+                    src={formData.image}
+                    alt="Vista previa"
+                    className="w-32 h-32 object-cover rounded mb-2"
+                  />
+                )}
+
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleSave(spec._id)}
@@ -179,6 +227,17 @@ export default function SpecialtiesCrud() {
                 <p className="text-gray-600 dark:text-gray-300">
                   {spec.description || "No especificada"}
                 </p>
+
+                {/*
+                Renderizar la imagen en base64 spec.image
+                */}
+                {spec.image && (
+                  <img
+                    src={spec.image}
+                    alt={spec.name}
+                    className="w-32 h-32 object-cover rounded mt-2"
+                  />
+                )}
                 <div className="flex gap-2 mt-2">
                   <button
                     onClick={() => handleEdit(spec)}
@@ -220,6 +279,33 @@ export default function SpecialtiesCrud() {
               placeholder="Descripción (opcional)"
               className="block w-full mb-4 p-2 border rounded"
             />
+            {/* Imagen (Base64 upload) */}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                  setNewSpecialty((prev) => ({
+                    ...prev,
+                    image: reader.result,
+                  }));
+                };
+                reader.readAsDataURL(file);
+              }}
+              className="block w-full mb-4 p-2 border rounded"
+            />
+
+            {/* Optional image preview */}
+            {newSpecialty.image && (
+              <img
+                src={newSpecialty.image}
+                alt="Vista previa"
+                className="w-32 h-32 object-cover rounded mb-4"
+              />
+            )}
             <div className="flex justify-end gap-2">
               <button
                 onClick={handleCreateSpecialty}
