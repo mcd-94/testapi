@@ -38,12 +38,11 @@ export default function Home() {
     <div>
       <main>
         <Hero
-          title="Patagonia Software Solutions:"
           bg="assets/heroBackgrounds/homePage.jpg"
           logo="assets/branding/logoCompletoSF.png"
           bookingButton="true"
         />
-        <section className="p-6">
+        <section className="p-3">
           <header className="mb-4 flex flex-col gap-1">
             <h2 className="text-3xl md:text-center font-semibold text-[#3478a2]">
               Servicios Médicos
@@ -62,6 +61,10 @@ export default function Home() {
                   title={e.name}
                   description={e.description}
                   image={e.image}
+                  displayTitle={true}
+                  displayDescription={false}
+                  border={true}
+                  shadow={true}
                 />
               ))
             ) : (
@@ -69,7 +72,7 @@ export default function Home() {
             )}
           </div>
         </section>
-        <section className="p-6">
+        <section className="p-3">
           <header className="mb-4 flex flex-col gap-1">
             <h2 className="text-3xl md:text-center font-semibold text-[#3478a2]">
               Obras Sociales
@@ -80,10 +83,19 @@ export default function Home() {
             </p>
           </header>
 
-          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-3 md:flex gap-4 md:grid-cols-3">
             {healthInsurances.length > 0 ? (
               healthInsurances.map((e) => (
-                <Card key={e._id} image={e.image} title={e.name} />
+                <Card
+                  key={e._id}
+                  image={e.image}
+                  title={e.name}
+                  description={e.description}
+                  displayTitle={false}
+                  displayDescription={false}
+                  border={false}
+                  shadow={false}
+                />
               ))
             ) : (
               <p>Cargando obras sociales...</p>

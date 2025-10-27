@@ -22,7 +22,6 @@ const ClientLayout = ({ children }) => {
     <>
       <Header />
       <div>{children}</div>
-
       <Footer />
     </>
   );
