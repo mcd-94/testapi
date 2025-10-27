@@ -4,19 +4,26 @@
 import { useEffect, useState } from "react";
 
 export default function HealthInsurancesCrud() {
-  const handleClick = () => {
-    console.log("Botón dentro de DoctorsCrud clickeado");
-  };
   const [healthInsurances, setHealthInsurances] = useState([]);
   const [editingId, setEditingId] = useState(null);
-  const [formData, setFormData] = useState({ name: "", description: "" });
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    image: "",
+    url: "",
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const [showModal, setShowModal] = useState(false);
-  const [newHI, setNewHI] = useState({ name: "", description: "" });
+  const [newHI, setNewHI] = useState({
+    name: "",
+    description: "",
+    image: "",
+    url: "",
+  });
 
-  // Obtener todas las obras sociales
+  // --- Obtener todas las obras sociales ---
   useEffect(() => {
     fetchHealthInsurances();
   }, []);
@@ -30,6 +37,7 @@ export default function HealthInsurancesCrud() {
       setHealthInsurances(data);
     } catch (err) {
       setError(err.message);
+      setTimeout(() => setError(null), 3000);
     } finally {
       setLoading(false);
     }
@@ -38,12 +46,17 @@ export default function HealthInsurancesCrud() {
   // --- Edición ---
   function handleEdit(hi) {
     setEditingId(hi._id);
-    setFormData({ name: hi.name, description: hi.description || "" });
+    setFormData({
+      name: hi.name,
+      description: hi.description,
+      image: hi.image,
+      url: hi.url || "",
+    });
   }
 
   function handleCancel() {
     setEditingId(null);
-    setFormData({ name: "", description: "" });
+    setFormData({ name: "", description: "", image: "", url: "" });
   }
 
   function handleChange(e) {
@@ -62,7 +75,8 @@ export default function HealthInsurancesCrud() {
       await fetchHealthInsurances();
       handleCancel();
     } catch (err) {
-      alert(err.message);
+      setError(err.message);
+      setTimeout(() => setError(null), 3000);
     }
   }
 
@@ -77,14 +91,26 @@ export default function HealthInsurancesCrud() {
       if (!res.ok) throw new Error("Error al eliminar la obra social");
       await fetchHealthInsurances();
     } catch (err) {
-      alert(err.message);
+      setError(err.message);
+      setTimeout(() => setError(null), 3000);
     }
+  }
+
+  // --- Funciones de carga de archivos ---
+  function handleFileUpload(e, setState) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setState((prev) => ({ ...prev, image: reader.result }));
+    };
+    reader.readAsDataURL(file);
   }
 
   // --- Modal de creación ---
   function openModal() {
     setShowModal(true);
-    setNewHI({ name: "", description: "" });
+    setNewHI({ name: "", description: "", image: "", url: "" });
   }
 
   function closeModal() {
@@ -98,7 +124,8 @@ export default function HealthInsurancesCrud() {
 
   async function handleCreateHI() {
     if (!newHI.name.trim()) {
-      alert("El nombre es obligatorio");
+      setError("El nombre es obligatorio");
+      setTimeout(() => setError(null), 3000);
       return;
     }
     try {
@@ -114,15 +141,25 @@ export default function HealthInsurancesCrud() {
       await fetchHealthInsurances();
       closeModal();
     } catch (err) {
-      alert(err.message);
+      setError(err.message);
+      setTimeout(() => setError(null), 3000);
     }
   }
 
+  // --- Cerrar modal con tecla Escape ---
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") closeModal();
+    };
+    if (showModal) document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [showModal]);
+
+  // --- Renderizado ---
   if (loading) return <p>Cargando obras sociales...</p>;
-  if (error) return <p>Error: {error}</p>;
 
   return (
-    <div className="p-6  space-y-6">
+    <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Lista de Obras Sociales</h1>
         <button
@@ -132,6 +169,12 @@ export default function HealthInsurancesCrud() {
           Crear nueva obra social
         </button>
       </div>
+
+      {error && (
+        <p className="text-red-600 font-medium bg-red-100 border border-red-300 rounded p-2">
+          {error}
+        </p>
+      )}
 
       <ul className="space-y-4">
         {healthInsurances.map((hi) => (
@@ -155,6 +198,28 @@ export default function HealthInsurancesCrud() {
                   placeholder="Descripción"
                   className="block w-full mb-2 p-2 border rounded"
                 />
+                <input
+                  name="url"
+                  value={formData.url}
+                  onChange={handleChange}
+                  placeholder="URL de sitio web"
+                  className="block w-full mb-2 p-2 border rounded"
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleFileUpload(e, setFormData)}
+                  className="block w-full mb-2 p-2 border rounded"
+                />
+
+                {formData.image && (
+                  <img
+                    src={formData.image}
+                    alt="Vista previa"
+                    className="w-32 h-32 object-cover rounded mb-2"
+                  />
+                )}
+
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleSave(hi._id)}
@@ -176,6 +241,24 @@ export default function HealthInsurancesCrud() {
                 <p className="text-gray-600 dark:text-gray-300">
                   {hi.description || "No especificada"}
                 </p>
+                {hi.url && (
+                  <a
+                    href={hi.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline"
+                  >
+                    Ir al sitio web
+                  </a>
+                )}
+                {hi.image && (
+                  <img
+                    src={hi.image}
+                    alt="Vista previa"
+                    className="w-32 h-32 object-cover rounded mb-2"
+                  />
+                )}
+
                 <div className="flex gap-2 mt-2">
                   <button
                     onClick={() => handleEdit(hi)}
@@ -196,7 +279,7 @@ export default function HealthInsurancesCrud() {
         ))}
       </ul>
 
-      {/* Modal */}
+      {/* --- Modal de creación --- */}
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white dark:bg-gray-900 rounded-lg p-6 shadow-lg w-96">
@@ -213,9 +296,31 @@ export default function HealthInsurancesCrud() {
               value={newHI.description}
               onChange={handleNewHIChange}
               placeholder="Descripción (opcional)"
-              className="block w-full mb-4 p-2 border rounded"
+              className="block w-full mb-2 p-2 border rounded"
             />
-            <div className="flex justify-end gap-2">
+            <input
+              name="url"
+              value={newHI.url}
+              onChange={handleNewHIChange}
+              placeholder="URL de sitio web"
+              className="block w-full mb-2 p-2 border rounded"
+            />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileUpload(e, setNewHI)}
+              className="block w-full mb-2 p-2 border rounded"
+            />
+
+            {newHI.image && (
+              <img
+                src={newHI.image}
+                alt="Vista previa"
+                className="w-32 h-32 object-cover rounded mb-2"
+              />
+            )}
+
+            <div className="flex justify-end gap-2 mt-4">
               <button
                 onClick={handleCreateHI}
                 className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"

@@ -28,6 +28,8 @@ export async function POST(req) {
     const newHI = new HealthInsurance({
       name: data.name,
       description: data.description || "",
+      image: data.image || "",
+      url: data.url || "",
     });
 
     const savedHI = await newHI.save();
@@ -51,7 +53,12 @@ export async function PATCH(req) {
 
     const updatedHI = await HealthInsurance.findByIdAndUpdate(
       data.id,
-      { name: data.name, description: data.description || "" },
+      {
+        name: data.name,
+        description: data.description,
+        image: data.image,
+        url: data.url || "",
+      },
       { new: true },
     );
 
