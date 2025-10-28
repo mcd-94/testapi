@@ -87,41 +87,67 @@ const LoginModal = () => {
   };
 
   return (
-    <nav
+    <div
       className={`
         ${loginModal ? "block" : "hidden"}
         rounded-b-md
-        bg-white
         p-3
         border border-[#4297cb]
         flex flex-col
         gap-3
+        bg-[url('/assets/branding/fondo.jpg')]
+        bg-repeat
+        md:px-100
       `}
     >
+      <div className="flex flex-col justify-center items-center">
+        <img
+          src="/assets/branding/logoSF.png"
+          alt="logo"
+          className={`
+            w-[50%] h-full
+            md:w-[40%]
+            `}
+        />
+        <div className="text-center">
+          <h2 className="text-xl text-[#005f99] font-bold">Iniciar Sesión</h2>
+          <p>Accede a tu cuenta de Medical IDW</p>
+        </div>
+      </div>
       <form onSubmit={handleLogin} className="flex flex-col gap-3">
-        <input
-          type="text"
-          placeholder="usuario"
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-          required
-          className="border rounded-lg px-3 py-2"
-        />
-        <input
-          type="password"
-          placeholder="contraseña"
-          value={userPassword}
-          onChange={(e) => setUserPassword(e.target.value)}
-          required
-          className="border rounded-lg px-3 py-2"
-        />
+        <div className="flex flex-col gap-1">
+          <label htmlFor="email" className="font-bold">
+            Correo electrónico
+          </label>
+          <input
+            type="text"
+            placeholder="usuario"
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
+            required
+            className="border border-[#c0c0c0] bg-white rounded-md px-3 py-2"
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <label htmlFor="password" className="font-bold">
+            Contraseña
+          </label>
+          <input
+            type="password"
+            placeholder="contraseña"
+            value={userPassword}
+            onChange={(e) => setUserPassword(e.target.value)}
+            required
+            className="border border-[#c0c0c0] bg-white rounded-md px-3 py-2"
+          />
+        </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="bg-blue-600 text-white rounded-lg py-2 hover:bg-blue-700 transition"
+          className="bg-[#4297cb] text-white font-bold rounded-md py-2 hover:bg-blue-700 transition"
         >
-          {loading ? "Accediendo..." : "Entrar"}
+          {loading ? "Accediendo..." : "Iniciar Sesión"}
         </button>
 
         {message && (
@@ -142,7 +168,7 @@ const LoginModal = () => {
       <p className="text-xs text-gray-500 text-center">
         Ejemplo: <code>emilys / emilyspass</code>
       </p>
-    </nav>
+    </div>
   );
 };
 

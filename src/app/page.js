@@ -44,7 +44,7 @@ export default function Home() {
         />
         <section className="p-5">
           <header className="mb-4 flex flex-col gap-1">
-            <h2 className="text-3xl md:text-center font-semibold text-[#3478a2]">
+            <h2 className="text-3xl md:text-center font-semibold text-[#005f99]">
               Servicios Médicos
             </h2>
             <p className="text-xl text-gray-600">
@@ -75,7 +75,7 @@ export default function Home() {
         </section>
         <section className="p-5 bg-[#faf8f8]">
           <header className="mb-4 flex flex-col gap-1">
-            <h2 className="text-3xl md:text-center font-semibold text-[#3478a2]">
+            <h2 className="text-3xl md:text-center font-semibold text-[#005f99]">
               Obras Sociales
             </h2>
             <p className="text-xl text-gray-600">
