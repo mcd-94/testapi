@@ -59,6 +59,7 @@ export default function Home() {
                 <Card
                   key={e._id}
                   title={e.name}
+                  titleColor={"#005f99"}
                   titleSize={"text-xl"}
                   description={e.description}
                   image={e.image}
@@ -91,6 +92,7 @@ export default function Home() {
                   key={e._id}
                   image={e.image}
                   title={e.name}
+                  titleColor={null}
                   description={e.description}
                   displayTitle={false}
                   displayDescription={false}

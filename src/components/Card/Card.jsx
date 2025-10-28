@@ -3,6 +3,7 @@ import React from "react";
 const Card = ({
   title,
   titleSize,
+  titleColor,
   description,
   image,
   displayTitle,
@@ -29,12 +30,13 @@ const Card = ({
         />
       )}
       {(displayTitle || displayDescription) && (
-        <div className="border-t border-[#c0c0c0] text-center p-3">
+        <div className={`border-t border-[#c0c0c0] text-center p-3`}>
           {displayTitle && title && (
             <h3
               className={`
               font-semibold mb-1
               ${titleSize}
+              text-[${titleColor}]
               `}
             >
               {title}
