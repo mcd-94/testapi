@@ -2,6 +2,7 @@ import React from "react";
 
 const Card = ({
   title,
+  titleSize,
   description,
   image,
   displayTitle,
@@ -16,8 +17,8 @@ const Card = ({
         flex flex-col
         justify-between
         overflow-hidden
-        ${shadow ? "shadow-sm" : ""}
-        ${border ? "border" : ""}
+        ${shadow ? "shadow-md" : ""}
+        ${border ? "border border-[#c0c0c0]" : ""}
       `}
     >
       {image && (
@@ -28,9 +29,16 @@ const Card = ({
         />
       )}
       {(displayTitle || displayDescription) && (
-        <div className="border-t text-center p-3">
+        <div className="border-t border-[#c0c0c0] text-center p-3">
           {displayTitle && title && (
-            <h3 className="text-lg font-semibold mb-1">{title}</h3>
+            <h3
+              className={`
+              font-semibold mb-1
+              ${titleSize}
+              `}
+            >
+              {title}
+            </h3>
           )}
           {displayDescription && description && (
             <p className="text-sm text-gray-600">{description}</p>

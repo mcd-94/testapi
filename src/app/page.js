@@ -59,6 +59,7 @@ export default function Home() {
                 <Card
                   key={e._id}
                   title={e.name}
+                  titleSize={"text-xl"}
                   description={e.description}
                   image={e.image}
                   displayTitle={true}
