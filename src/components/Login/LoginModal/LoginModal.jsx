@@ -93,7 +93,7 @@ const LoginModal = () => {
         rounded-b-md
         bg-white
         p-3
-        border border-blue-400
+        border border-[#4297cb]
         flex flex-col
         gap-3
       `}
