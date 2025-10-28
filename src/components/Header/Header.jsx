@@ -33,9 +33,8 @@ const Header = () => {
           flex
           justify-between
           items-center
-          p-1.5 m-1.5 mb-0
-          sm:p-2 sm:m-2 lg:mb-0
-          lg:p-2.5 lg:m-2.5 lg:mb-0
+          m-1.5 mb-0
+          p-2.5
         `}
       >
         <StartMenuLauncher />

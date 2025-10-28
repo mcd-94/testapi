@@ -42,7 +42,7 @@ export default function Home() {
           logo="assets/branding/logoCompletoSF.png"
           bookingButton="true"
         />
-        <section className="p-3">
+        <section className="p-5">
           <header className="mb-4 flex flex-col gap-1">
             <h2 className="text-3xl md:text-center font-semibold text-[#3478a2]">
               Servicios Médicos
@@ -72,7 +72,7 @@ export default function Home() {
             )}
           </div>
         </section>
-        <section className="p-3">
+        <section className="p-5 bg-[#faf8f8]">
           <header className="mb-4 flex flex-col gap-1">
             <h2 className="text-3xl md:text-center font-semibold text-[#3478a2]">
               Obras Sociales
