@@ -21,7 +21,6 @@ const StartMenu = () => {
       flex
       flex-col
       gap-3
-
     `}
     >
       <ul className="flex flex-col gap-3">
