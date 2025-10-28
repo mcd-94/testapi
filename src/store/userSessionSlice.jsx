@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   userSession: false,
+  user: null,
 };
 
 const userSessionSlice = createSlice({
@@ -9,14 +10,20 @@ const userSessionSlice = createSlice({
   initialState,
   reducers: {
     setSession(state) {
-      // Si hay un usuario en sessionStorage, userSession es true
       const user = sessionStorage.getItem("user");
-      state.userSession = !!user; // true si existe, false si no
+      if (user) {
+        const parsedUser = JSON.parse(user);
+        state.user = parsedUser;
+        state.userSession = true;
+      } else {
+        state.user = null;
+        state.userSession = false;
+      }
     },
     clearSession(state) {
-      // Para cerrar sesión desde Redux
       sessionStorage.removeItem("user");
       sessionStorage.removeItem("token");
+      state.user = null;
       state.userSession = false;
     },
   },
