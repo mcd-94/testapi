@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { closeStartMenu } from "@/store/startMenuSlice";
+import { openLoginModal, closeLoginModal } from "@/store/loginModalSlice";
+import { setSession } from "@/store/userSessionSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faXmark } from "@/lib/icons.js";
-import { useSelector, useDispatch } from "react-redux";
-import { openLoginModal, closeLoginModal } from "@/store/loginModalSlice";
-import { closeStartMenu } from "@/store/startMenuSlice";
-import { setSession, clearSession } from "@/store/userSessionSlice";
-const LogInButton = ({ showIcon, asHandler = false }) => {
+
+const LogInButton = ({ asHandler = false }) => {
   const userSession = useSelector((state) => state.userSession.userSession);
   const startMenu = useSelector((state) => state.startMenu.isOpen);
   const loginModal = useSelector((state) => state.loginModal.isOpen);
@@ -39,7 +40,10 @@ const LogInButton = ({ showIcon, asHandler = false }) => {
         onClick={handleLoginClick}
         className={`block flex justify-center items-center rounded-md cursor-pointer`}
       >
-        Log In
+        <FontAwesomeIcon
+          icon={loginModal ? faXmark : faUser}
+          className="text-[1.5rem]"
+        />
       </button>
     </div>
   );
