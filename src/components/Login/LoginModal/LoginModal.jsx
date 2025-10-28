@@ -109,10 +109,9 @@ const LoginModal = () => {
             md:w-[40%]
             `}
         />
-        <div className="text-center">
-          <h2 className="text-xl text-[#005f99] font-bold">Iniciar Sesión</h2>
-          <p>Accede a tu cuenta de Medical IDW</p>
-        </div>
+        <p className="text-xl md:text-3xl text-[#005f99] font-bold">
+          Accede a tu cuenta
+        </p>
       </div>
       <form onSubmit={handleLogin} className="flex flex-col gap-3">
         <div className="flex flex-col gap-1">
