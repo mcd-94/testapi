@@ -109,7 +109,7 @@ const LoginModal = () => {
             md:w-[40%]
             `}
         />
-        <p className="text-xl md:text-3xl text-[#005f99] font-bold">
+        <p className="text-2xl md:text-3xl text-[#005f99] font-bold">
           Accede a tu cuenta
         </p>
       </div>
