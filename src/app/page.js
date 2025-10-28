@@ -83,7 +83,7 @@ export default function Home() {
             </p>
           </header>
 
-          <div className="grid grid-cols-3 md:flex gap-4 md:grid-cols-3">
+          <div className="grid grid-cols-2 md:flex gap-4 md:grid-cols-3">
             {healthInsurances.length > 0 ? (
               healthInsurances.map((e) => (
                 <Card
