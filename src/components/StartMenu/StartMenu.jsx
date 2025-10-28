@@ -43,7 +43,11 @@ const StartMenu = () => {
           onClick={LogInButton({ asHandler: true })}
           className="rounded-md block bg-[#4297cb] text-[#ffffff] p-3 font-bold text-lg cursor-pointer"
         >
-          {userSession ? <LogOutButton /> : <LogInButton />}
+          {userSession ? (
+            <LogOutButton />
+          ) : (
+            <LogInButton showIcon={true} showText={true} onHeader={false} />
+          )}
         </li>{" "}
       </ul>
     </nav>

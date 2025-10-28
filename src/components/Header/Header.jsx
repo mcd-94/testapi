@@ -112,7 +112,7 @@ const Header = () => {
               <FontAwesomeIcon icon={faUser} className="text-[1.5rem]" />
             </Link>
           ) : (
-            <LogInButton />
+            <LogInButton showIcon={true} showText={true} onHeader={true} />
           )}
         </header>
 

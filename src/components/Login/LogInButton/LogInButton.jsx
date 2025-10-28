@@ -8,7 +8,7 @@ import { setSession } from "@/store/userSessionSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faXmark } from "@/lib/icons.js";
 
-const LogInButton = ({ asHandler = false }) => {
+const LogInButton = ({ showIcon, showText, onHeader, asHandler = false }) => {
   const userSession = useSelector((state) => state.userSession.userSession);
   const startMenu = useSelector((state) => state.startMenu.isOpen);
   const loginModal = useSelector((state) => state.loginModal.isOpen);
@@ -40,10 +40,16 @@ const LogInButton = ({ asHandler = false }) => {
         onClick={handleLoginClick}
         className={`block flex justify-center items-center rounded-md cursor-pointer`}
       >
-        <FontAwesomeIcon
-          icon={loginModal ? faXmark : faUser}
-          className="text-[1.5rem]"
-        />
+        {showIcon && (
+          <FontAwesomeIcon
+            icon={loginModal ? faXmark : faUser}
+            className="text-[1.5rem] mr-3"
+          />
+        )}
+
+        {showText && (
+          <span className={`${onHeader ? "hidden md:block" : ""}`}>Log In</span>
+        )}
       </button>
     </div>
   );
