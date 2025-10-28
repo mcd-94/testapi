@@ -115,7 +115,7 @@ const LoginModal = () => {
       </div>
       <form onSubmit={handleLogin} className="flex flex-col gap-3">
         <div className="flex flex-col gap-1">
-          <label htmlFor="email" className="font-bold">
+          <label htmlFor="email" className="text-[#005f99] font-bold">
             Correo electrónico
           </label>
           <input
@@ -128,7 +128,7 @@ const LoginModal = () => {
           />
         </div>
         <div className="flex flex-col gap-1">
-          <label htmlFor="password" className="font-bold">
+          <label htmlFor="password" className="text-[#005f99] font-bold">
             Contraseña
           </label>
           <input
