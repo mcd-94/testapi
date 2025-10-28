@@ -2,8 +2,10 @@ import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleStartMenu } from "@/store/startMenuSlice";
 import { navMenuRoutes } from "@/lib/navMenuRoutes.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ThemeToggler from "@/components/ThemeToggler/ThemeToggler";
-import LoginLauncher from "@/components/Login/LoginLauncher/LoginLauncher";
+import LogOutButton from "@/components/Login/LogOutButton/LogOutButton";
+import LogInButton from "@/components/Login/LogInButton/LogInButton";
 
 const StartMenu = () => {
   const startMenu = useSelector((state) => state.startMenu.isOpen);
@@ -24,23 +26,25 @@ const StartMenu = () => {
     `}
     >
       <ul className="flex flex-col gap-3">
-        {navMenuRoutes.map((route) => (
-          <li key={route.title}>
+        {navMenuRoutes.map((e) => (
+          <li key={e.title}>
             <Link
-              href={route.route}
+              href={e.route}
               onClick={() => dispatch(toggleStartMenu())}
               className="rounded-md p-3 block bg-[#4297cb] text-[#ffffff] font-bold text-lg"
             >
-              {route.title}
+              <FontAwesomeIcon icon={e.faIcon} size="lg" className="mr-3" />
+              <span>{e.title}</span>
             </Link>
           </li>
         ))}
         <li
-          key={"454lknlksn"}
-          className="rounded-md block bg-[#4297cb] text-[#ffffff] p-3 font-bold text-lg"
+          key="454lknlksn"
+          onClick={LogInButton({ asHandler: true })}
+          className="rounded-md block bg-[#4297cb] text-[#ffffff] p-3 font-bold text-lg cursor-pointer"
         >
-          {userSession ? "log out" : <LoginLauncher showIcon={false} />}
-        </li>
+          {userSession ? <LogOutButton /> : <LogInButton />}
+        </li>{" "}
       </ul>
     </nav>
   );

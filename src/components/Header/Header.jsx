@@ -1,7 +1,7 @@
 "use client";
 import StartMenuLauncher from "@/components/StartMenu/StartMenuLauncher";
 import StartMenu from "@/components/StartMenu/StartMenu";
-import LoginLauncher from "@/components/Login/LoginLauncher/LoginLauncher";
+import LogInButton from "@/components/Login/LogInButton/LogInButton";
 import LoginModal from "@/components/Login/LoginModal/LoginModal";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -89,7 +89,13 @@ const Header = () => {
           `}
         >
           <StartMenuLauncher />
-          <Link href="/" onClick={() => dispatch(closeStartMenu())}>
+          <Link
+            href="/"
+            onClick={() => {
+              dispatch(closeStartMenu());
+              dispatch(closeLoginModal());
+            }}
+          >
             <img
               src="/assets/branding/logoHeader.png"
               alt="Logo"
@@ -98,7 +104,7 @@ const Header = () => {
           </Link>
           {userSession ? (
             <Link
-              href="/dashboard"
+              href="/admin"
               onClick={() => {
                 dispatch(closeStartMenu());
               }}
@@ -106,7 +112,7 @@ const Header = () => {
               <FontAwesomeIcon icon={faUser} className="text-[1.5rem]" />
             </Link>
           ) : (
-            <LoginLauncher showIcon={true} />
+            <LogInButton showIcon={true} />
           )}
         </header>
 
