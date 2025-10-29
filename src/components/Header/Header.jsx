@@ -16,7 +16,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const startMenu = useSelector((state) => state.startMenu.isOpen);
   const userSession = useSelector((state) => state.userSession.userSession);
-
+  const userRole = useSelector((state) => state.userSession.user?.role);
   const loginModal = useSelector((state) => state.loginModal.isOpen);
 
   const [scrollDir, setScrollDir] = useState("up");
@@ -104,7 +104,7 @@ const Header = () => {
           </Link>
           {userSession ? (
             <Link
-              href="/admin"
+              href={userRole === "admin" ? "/admin" : "/user"}
               onClick={() => {
                 dispatch(closeStartMenu());
               }}
