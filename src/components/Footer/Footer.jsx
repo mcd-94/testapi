@@ -1,43 +1,46 @@
-import React from "react";
 import { useEffect, useState } from "react";
 
 const Footer = () => {
   const [specialties, setSpecialties] = useState([]);
-  useEffect(() => {
-    async function fetchSpecialties() {
-      try {
-        const res = await fetch("/specialties");
-        if (!res.ok) throw new Error("Error al obtener las especialidades");
 
-        const data = await res.json();
-        setSpecialties(data);
-      } catch (error) {
-        console.error(error);
+  useEffect(() => {
+    // 🩺 Cargar specialties desde localStorage (solo en cliente)
+    if (typeof window !== "undefined") {
+      const storedSpecialties = localStorage.getItem("specialties");
+
+      if (storedSpecialties) {
+        try {
+          setSpecialties(JSON.parse(storedSpecialties));
+        } catch (err) {
+          console.error(
+            "Error al parsear specialties desde localStorage:",
+            err,
+          );
+        }
       }
     }
-
-    fetchSpecialties();
-  }, []);
+  }, []); // 👈 cierre correcto del useEffect
 
   return (
     <footer
       className={`
-      p-5
-      bg-[url('/assets/branding/fondo.jpg')]
-      bg-repeat
-    `}
+        p-5
+        bg-[url('/assets/branding/fondo.jpg')]
+        bg-repeat
+      `}
     >
       <div
         className={`
-        flex flex-col-reverse
-        gap-10
-        md:grid md:grid-cols-[30%_auto]
+          flex flex-col-reverse
+          gap-10
+          md:grid md:grid-cols-[30%_auto]
         `}
       >
         <div className="flex justify-center items-center">
           <img
             src="/assets/branding/logoCompletoSF.png"
             className="w-[200px] h-auto"
+            alt="Logo MedicalIDW"
           />
         </div>
         <div className="flex flex-col gap-3 md:flex-row md:gap-6">

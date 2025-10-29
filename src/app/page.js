@@ -3,36 +3,40 @@
 import { useEffect, useState } from "react";
 import Hero from "@/components/Hero/Hero";
 import Card from "@/components/Card/Card";
+
 export default function Home() {
   const [specialties, setSpecialties] = useState([]);
   const [healthInsurances, setHealthInsurances] = useState([]);
 
   useEffect(() => {
-    async function fetchSpecialties() {
-      try {
-        const res = await fetch("/specialties");
-        if (!res.ok) throw new Error("Error al obtener las especialidades");
+    // 🩺 Cargar specialties desde localStorage (solo en cliente)
+    if (typeof window !== "undefined") {
+      const storedSpecialties = localStorage.getItem("specialties");
+      const storedHealthInsurances = localStorage.getItem("healthInsurances");
 
-        const data = await res.json();
-        setSpecialties(data);
-      } catch (error) {
-        console.error(error);
+      if (storedSpecialties) {
+        try {
+          setSpecialties(JSON.parse(storedSpecialties));
+        } catch (err) {
+          console.error(
+            "Error al parsear specialties desde localStorage:",
+            err,
+          );
+        }
+      }
+
+      if (storedHealthInsurances) {
+        try {
+          setHealthInsurances(JSON.parse(storedHealthInsurances));
+        } catch (err) {
+          console.error(
+            "Error al parsear healthInsurances desde localStorage:",
+            err,
+          );
+        }
       }
     }
-    async function fetchHealthInsurances() {
-      try {
-        const res = await fetch("/healthinsurances");
-        if (!res.ok) throw new Error("Error al obtener las obras sociales");
-
-        const data = await res.json();
-        setHealthInsurances(data);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    fetchSpecialties();
-    fetchHealthInsurances();
-  }, []);
+  }, []); // 👈 Cierra correctamente el useEffect
 
   return (
     <div>
@@ -42,6 +46,8 @@ export default function Home() {
           logo="assets/branding/logoCompletoSF.png"
           bookingButton="true"
         />
+
+        {/* ---------- Especialidades ---------- */}
         <section className="p-5">
           <header className="mb-4 flex flex-col gap-1">
             <h2 className="text-3xl md:text-center font-semibold text-[#005f99]">
@@ -59,8 +65,8 @@ export default function Home() {
                 <Card
                   key={e._id}
                   title={e.name}
-                  titleColor={"#005f99"}
-                  titleSize={"text-xl"}
+                  titleColor="#005f99"
+                  titleSize="text-xl"
                   description={e.description}
                   image={e.image}
                   displayTitle={true}
@@ -74,6 +80,8 @@ export default function Home() {
             )}
           </div>
         </section>
+
+        {/* ---------- Obras Sociales ---------- */}
         <section className="p-5 bg-[#faf8f8]">
           <header className="mb-4 flex flex-col gap-1">
             <h2 className="text-3xl md:text-center font-semibold text-[#005f99]">
