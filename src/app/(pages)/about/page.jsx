@@ -8,8 +8,8 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <div>
-      <Hero title="Sobre nosotros" bg="assets/heroBackgrounds/aboutPage.jpg" />
+    <main className="flex flex-col items-center justify-center gap-5">
+      <Hero title="Conocénos" bg="assets/heroBackgrounds/aboutPage.jpg" />
 
       <section
         className={`
@@ -18,14 +18,15 @@ export default function Page() {
           md:grid md:grid-cols-[50%_auto]
           md:items-center
           gap-3
-          m-3
+          mx-5
           md:p-15
           bg-[url('/assets/branding/fondo.jpg')]
           bg-repeat
+
           `}
       >
         <header className="flex flex-col gap-5">
-          <h2 className="text-3xl md:text-5xl font-semibold text-[#005f99]">
+          <h2 className="text-3xl md:text-5xl font-semibold my-5 text-[#005f99]">
             Nuestra Misión
           </h2>
           <p className="text-xl text-gray-600">
@@ -50,46 +51,44 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="ourClinicsSection border">
-        <header>Nuestras clínicas</header>
+      <section className="mx-5">
+        <header className="flex flex-col gap-5">
+          <h2 className="text-3xl md:text-5xl my-5 font-semibold text-[#005f99]">
+            Nuestras Clínicas
+          </h2>
+        </header>
 
-        <p>
-          En MEDICALIDW, nuestra misión es mejorar la calidad de vida de las
-          personas a través de una atención médica cercana, confiable y de
-          excelencia.
-        </p>
-
-        <div className="cardContainer flex gap-3">
-          {/* Puedo usar JavaScript dentro de JSX */}
-          {console.log("Usar JavaScript")}
-
-          <div className="border card flex flex-col jutify-center items-center border rounded-md shadow-lg px-3">
-            <h3 className="border font-bold">Clínica Norte</h3>
-
-            <img src="clinics/clinicaNorte.png" alt="" className="rounded-md" />
-
-            <h4 className="font-bold">Especialidades:</h4>
-            <ul className="border list-[square]">
-              <li>Pediatría</li>
-              <li>Cardiología</li>
-              <li>Dermatología</li>
-            </ul>
-          </div>
-
-          <div className="border card flex flex-col jutify-center items-center border rounded-md shadow-lg pt-1">
-            <h3>Clínica Norte</h3>
-
-            <img src="clinics/clinicaNorte.png" alt="" className="rounded-md" />
-
-            <h4 className="font-bold">Especialidades:</h4>
-            <ul className="border list-[square]">
-              <li>Pediatría</li>
-              <li>Cardiología</li>
-              <li>Dermatología</li>
-            </ul>
-          </div>
+        <div
+          className={`
+          flex flex-col
+          gap-5
+          p-5
+          `}
+        >
+          <Card
+            key={"xxxxx"}
+            image={"/assets/places/clinicaNorte.png"}
+            title={"Clínica Norte"}
+            titleColor={null}
+            description={null}
+            displayTitle={true}
+            displayDescription={false}
+            border={true}
+            shadow={true}
+          />
+          <Card
+            key={"x3xxx"}
+            image={"/assets/places/clinicaSur.jpg"}
+            title={"Clínica Sur"}
+            titleColor={null}
+            description={null}
+            displayTitle={true}
+            displayDescription={false}
+            border={true}
+            shadow={true}
+          />
         </div>
       </section>
-    </div>
+    </main>
   );
 }
