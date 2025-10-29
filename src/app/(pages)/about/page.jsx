@@ -50,10 +50,10 @@ export default function Page() {
           />
         </div>
       </section>
-
+      <div className="w-[200px] h-[3px] bg-[#4297cb] my-4 rounded-md" />
       <section className="mx-5">
         <header className="flex flex-col gap-5">
-          <h2 className="text-3xl md:text-5xl my-5 font-semibold text-[#005f99]">
+          <h2 className="text-3xl md:text-5xl text-center font-semibold text-[#005f99]">
             Nuestras Clínicas
           </h2>
         </header>
