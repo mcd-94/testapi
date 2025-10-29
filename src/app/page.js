@@ -8,15 +8,20 @@ export default function Home() {
   const [specialties, setSpecialties] = useState([]);
   const [healthInsurances, setHealthInsurances] = useState([]);
 
+  // 🩺 Cargar datos desde localStorage al montar el componente
   useEffect(() => {
-    // 🩺 Cargar specialties desde localStorage (solo en cliente)
     if (typeof window !== "undefined") {
       const storedSpecialties = localStorage.getItem("specialties");
       const storedHealthInsurances = localStorage.getItem("healthInsurances");
 
       if (storedSpecialties) {
         try {
-          setSpecialties(JSON.parse(storedSpecialties));
+          const parsedSpecialties = JSON.parse(storedSpecialties);
+          console.log(
+            "Especialidades encontradas en localStorage:",
+            parsedSpecialties,
+          );
+          setSpecialties(parsedSpecialties);
         } catch (err) {
           console.error(
             "Error al parsear specialties desde localStorage:",
@@ -27,7 +32,12 @@ export default function Home() {
 
       if (storedHealthInsurances) {
         try {
-          setHealthInsurances(JSON.parse(storedHealthInsurances));
+          const parsedHealthInsurances = JSON.parse(storedHealthInsurances);
+          console.log(
+            "Obras sociales encontradas en localStorage:",
+            parsedHealthInsurances,
+          );
+          setHealthInsurances(parsedHealthInsurances);
         } catch (err) {
           console.error(
             "Error al parsear healthInsurances desde localStorage:",
@@ -36,11 +46,19 @@ export default function Home() {
         }
       }
     }
-  }, []); // 👈 Cierra correctamente el useEffect
+  }, []);
+
+  // 👇 Este efecto se ejecuta cada vez que cambia specialties
+  useEffect(() => {
+    if (specialties.length > 0) {
+      console.log("Especialidades cargadas en el estado:", specialties);
+    }
+  }, [specialties]);
 
   return (
     <div>
       <main>
+        {/* ---------- Hero ---------- */}
         <Hero
           bg="assets/heroBackgrounds/homePage.jpg"
           logo="assets/branding/logoCompletoSF.png"
