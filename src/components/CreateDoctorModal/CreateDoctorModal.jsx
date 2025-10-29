@@ -9,7 +9,7 @@ export default function CreateDoctorModal({
   handleClose,
 }) {
   return (
-    <div className="fixed inset-0 z-[3000] flex justify-center bg-black/50 backdrop-blur-sm p-5">
+    <div className="fixed inset-0 z-[3000] flex justify-center bg-black/50 backdrop-blur-sm p-1">
       <div className="w-full flex justify-center p-5">
         <div className="bg-white rounded-md shadow-2xl w-[100%] p-6 sm:p-8 overflow-auto max-h-[90vh] animate-fadeIn">
           <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">
