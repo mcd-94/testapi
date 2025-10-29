@@ -16,7 +16,6 @@ const ClientLayout = ({ children }) => {
     dispatch(setSession());
   }, [dispatch]);
 
-  // Ejecuta ambos hooks para cargar y guardar datos en localStorage
   const {
     specialties,
     loading: loadingSpecialties,
@@ -32,34 +31,14 @@ const ClientLayout = ({ children }) => {
   // Mostrar loading si cualquiera de los dos aún está cargando
   if (loadingSpecialties || loadingHealthInsurances) {
     return (
-      <div>
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
-          {/* Spinner */}
-          <div className="w-16 h-16 border-4 border-blue-500 border-dashed rounded-full animate-spin mb-6"></div>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
+        {/* Spinner */}
+        <div className="w-16 h-16 border-4 border-blue-500 border-dashed rounded-full animate-spin mb-6"></div>
 
-          {/* Texto de carga */}
-          <h1 className="text-xl font-semibold text-gray-700 mb-2">
-            Cargando datos...
-          </h1>
-          <p className="text-gray-500">
-            Estamos preparando todo para ti. Esto no tomará mucho.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  // Mostrar error si alguno falla
-  if (errorSpecialties || errorHealthInsurances) {
-    return (
-      <div className="text-center p-4 text-red-600">
-        Error al cargar los datos:
-        <br />
-        {errorSpecialties && <span>- Especialidades: {errorSpecialties}</span>}
-        <br />
-        {errorHealthInsurances && (
-          <span>- Obras Sociales: {errorHealthInsurances}</span>
-        )}
+        {/* Texto de carga */}
+        <h1 className="text-xl font-semibold text-gray-700 mb-2">
+          Cargando datos...
+        </h1>
       </div>
     );
   }
