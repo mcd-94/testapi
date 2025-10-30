@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
-import HealthInsurance from "@/models/HealthInsurance";
+import HealthInsurance from "@/models/healthInsurance";
 
 // GET: obtener todas las obras sociales
 export async function GET() {
@@ -30,6 +30,7 @@ export async function POST(req) {
       description: data.description || "",
       image: data.image || "",
       url: data.url || "",
+      discount: data.discount || 0,
     });
 
     const savedHI = await newHI.save();
@@ -58,6 +59,7 @@ export async function PATCH(req) {
         description: data.description,
         image: data.image,
         url: data.url || "",
+        discount: data.discount || 0,
       },
       { new: true },
     );

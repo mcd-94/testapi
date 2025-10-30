@@ -4,7 +4,7 @@ import { connectDB } from "@/lib/mongodb";
 import mongoose from "mongoose";
 import Doctor from "@/models/doctor";
 import Specialty from "@/models/specialty";
-import HealthInsurance from "@/models/HealthInsurance";
+import HealthInsurance from "@/models/healthInsurance";
 
 export async function GET() {
   try {

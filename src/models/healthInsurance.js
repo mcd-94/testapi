@@ -6,6 +6,7 @@ const HealthInsuranceSchema = new mongoose.Schema(
     description: { type: String, default: "" },
     image: { type: String, default: "" },
     url: { type: String, default: "" },
+    discount: { type: Number, default: 0 },
   },
   { timestamps: true },
 );

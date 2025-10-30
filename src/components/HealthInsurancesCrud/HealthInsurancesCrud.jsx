@@ -11,6 +11,7 @@ export default function HealthInsurancesCrud() {
     description: "",
     image: "",
     url: "",
+    discount: 0,
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,6 +22,7 @@ export default function HealthInsurancesCrud() {
     description: "",
     image: "",
     url: "",
+    discount: 0,
   });
 
   // --- Obtener todas las obras sociales ---
@@ -51,17 +53,27 @@ export default function HealthInsurancesCrud() {
       description: hi.description,
       image: hi.image,
       url: hi.url || "",
+      discount: hi.discount || 0,
     });
   }
 
   function handleCancel() {
     setEditingId(null);
-    setFormData({ name: "", description: "", image: "", url: "" });
+    setFormData({
+      name: "",
+      description: "",
+      image: "",
+      url: "",
+      discount: 0,
+    });
   }
 
   function handleChange(e) {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === "discount" ? parseFloat(value) || 0 : value,
+    }));
   }
 
   async function handleSave(id) {
@@ -110,7 +122,7 @@ export default function HealthInsurancesCrud() {
   // --- Modal de creación ---
   function openModal() {
     setShowModal(true);
-    setNewHI({ name: "", description: "", image: "", url: "" });
+    setNewHI({ name: "", description: "", image: "", url: "", discount: 0 });
   }
 
   function closeModal() {
@@ -119,7 +131,10 @@ export default function HealthInsurancesCrud() {
 
   function handleNewHIChange(e) {
     const { name, value } = e.target;
-    setNewHI((prev) => ({ ...prev, [name]: value }));
+    setNewHI((prev) => ({
+      ...prev,
+      [name]: name === "discount" ? parseFloat(value) || 0 : value,
+    }));
   }
 
   async function handleCreateHI() {
@@ -206,6 +221,16 @@ export default function HealthInsurancesCrud() {
                   className="block w-full mb-2 p-2 border rounded"
                 />
                 <input
+                  name="discount"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={formData.discount}
+                  onChange={handleChange}
+                  placeholder="Descuento (%)"
+                  className="block w-full mb-2 p-2 border rounded"
+                />
+                <input
                   type="file"
                   accept="image/*"
                   onChange={(e) => handleFileUpload(e, setFormData)}
@@ -250,6 +275,11 @@ export default function HealthInsurancesCrud() {
                   >
                     Ir al sitio web
                   </a>
+                )}
+                {hi.discount > 0 && (
+                  <p className="text-green-600 font-medium">
+                    Descuento: {hi.discount}%
+                  </p>
                 )}
                 {hi.image && (
                   <img
@@ -303,6 +333,16 @@ export default function HealthInsurancesCrud() {
               value={newHI.url}
               onChange={handleNewHIChange}
               placeholder="URL de sitio web"
+              className="block w-full mb-2 p-2 border rounded"
+            />
+            <input
+              name="discount"
+              type="number"
+              min="0"
+              step="0.01"
+              value={newHI.discount}
+              onChange={handleNewHIChange}
+              placeholder="Descuento (%)"
               className="block w-full mb-2 p-2 border rounded"
             />
             <input

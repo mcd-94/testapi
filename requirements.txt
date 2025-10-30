@@ -1,0 +1,88 @@
+Tengo montar un sistema de reserva de turnos medicos.
+
+Cuento con una API que devuelve las siguientes colecciones/entidades: Medicos, Especialidades y Obras Sociales.
+
+A continuacion detallo el modelo para cada una de esas entidades:
+
+// models/doctor.js
+
+import mongoose from "mongoose";
+
+const doctorSchema = new mongoose.Schema(
+  {
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    licenseNumber: { type: Number, required: true },
+    phone: { type: String },
+    email: { type: String },
+    specialty: [{ type: mongoose.Schema.Types.ObjectId, ref: "Specialty" }],
+    healthInsurances: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "HealthInsurance" },
+    ],
+    description: { type: String },
+    consultationFee: { type: Number, required: true },
+    image: { type: String },
+  },
+  { timestamps: true },
+);
+
+export default mongoose.models.Doctor || mongoose.model("Doctor", doctorSchema);
+
+
+// models/specialty.js
+import mongoose from "mongoose";
+
+const SpecialtySchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true, unique: true },
+    description: { type: String, default: "" },
+    image: { type: String, default: "" },
+  },
+  { timestamps: true },
+);
+
+export default mongoose.models.Specialty ||
+  mongoose.model("Specialty", SpecialtySchema);
+
+
+// models/HealthInsurance.js
+import mongoose from "mongoose";
+
+const HealthInsuranceSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true, unique: true },
+    description: { type: String, default: "" },
+    image: { type: String, default: "" },
+    url: { type: String, default: "" },
+  },
+  { timestamps: true },
+);
+
+export default mongoose.models.HealthInsurance ||
+  mongoose.model("HealthInsurance", HealthInsuranceSchema);
+
+
+Ya tengo definidos los metodos GET, POST, PATCH y DELETE, y puedo hacer CRUD de esas entidades en un frontend.
+
+Ahora debo añadir dos entidades al sistema: Turnos y Reservas.
+
+De los Turnos:
+• id: número identificador,
+• Médico: identificador de Médico,
+• Fecha y Hora,
+• Disponible: booleano
+
+De las Reservas:
+• id: número identificador,
+• Documento: string para aceptar pacientes del extranjero,
+• Apellido y nombre del paciente: string,
+• Turno: identificador de Turno,
+• Especialidad: identificador de Especialidad,
+• Obra social: identificador de Obra Social,
+• Valor total (calculado según médico y obra social seleccionada).
+
+
+"En relación a las Reservas (Rol Visitante):
+•Permitir a los usuarios externos crear una nueva reserva de turno.
+•Mostrar el resultado final de sus elecciones (médico, especialidad, obra social, fecha
+horario, costo total)."
