@@ -1,3 +1,4 @@
+// app/(routes)/reservations/route/js
 import { NextResponse } from "next/server";
 import Reservation from "@/models/reservation";
 import Appointment from "@/models/appointment";
@@ -96,7 +97,7 @@ export async function POST(req) {
     // ==============================
     // 3️⃣ Calcular valor total
     // ==============================
-    const discount = insuranceDoc.discountFee || 0;
+    const discount = insuranceDoc.discount || 0;
     const totalAmount = doctorDoc.consultationFee * (1 - discount / 100);
 
     // ==============================
