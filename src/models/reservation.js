@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+// something
 const ReservationSchema = new mongoose.Schema(
   {
     dni: { type: Number, required: true },
