@@ -113,19 +113,21 @@ export default function Home() {
 
           <div className="grid grid-cols-3 md:flex gap-4 md:grid-cols-3">
             {healthInsurances.length > 0 ? (
-              healthInsurances.map((e) => (
-                <Card
-                  key={e._id}
-                  image={e.image}
-                  title={e.name}
-                  titleColor={null}
-                  description={e.description}
-                  displayTitle={false}
-                  displayDescription={false}
-                  border={false}
-                  shadow={false}
-                />
-              ))
+              healthInsurances
+                .filter((e) => e.name.trim().toLowerCase() !== "particular")
+                .map((e) => (
+                  <Card
+                    key={e._id}
+                    image={e.image}
+                    title={e.name}
+                    titleColor={null}
+                    description={e.description}
+                    displayTitle={false}
+                    displayDescription={false}
+                    border={false}
+                    shadow={false}
+                  />
+                ))
             ) : (
               <p>Cargando obras sociales...</p>
             )}
