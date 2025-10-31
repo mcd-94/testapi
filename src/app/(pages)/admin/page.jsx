@@ -5,7 +5,7 @@ import HealthInsurancesCrud from "@/components/HealthInsurancesCrud/HealthInsura
 import SpecialtiesCrud from "@/components/SpecialtiesCrud/SpecialtiesCrud";
 import AppointmentsCrud from "@/components/AppointmentsCrud/AppointmentsCrud";
 import ReservationsCrud from "@/components/ReservationsCrud/ReservationsCrud";
-
+import UsersCrud from "@/components/UsersCrud/UsersCrud";
 import { useSelector, useDispatch } from "react-redux";
 export default function AdminPage() {
   const adminMenu = [
@@ -14,6 +14,7 @@ export default function AdminPage() {
     { name: "Especialidades", component: SpecialtiesCrud },
     { name: "Turnos", component: AppointmentsCrud },
     { name: "Reservas", component: ReservationsCrud },
+    { name: "Usuarios", component: UsersCrud },
   ];
 
   const [selected, setSelected] = useState(adminMenu[0]);

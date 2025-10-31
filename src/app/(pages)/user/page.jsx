@@ -3,10 +3,11 @@ import { useState } from "react";
 import DoctorsCrud from "@/components/DoctorsCrud/DoctorsCrud";
 import HealthInsurancesCrud from "@/components/HealthInsurancesCrud/HealthInsurancesCrud";
 import SpecialtiesCrud from "@/components/SpecialtiesCrud/SpecialtiesCrud";
+import ReservationsCrud from "@/components/ReservationsCrud/ReservationsCrud";
 import { useSelector, useDispatch } from "react-redux";
 
 export default function UserPage() {
-  const userMenu = [{ name: "Mis Turnos", component: DoctorsCrud }];
+  const userMenu = [{ name: "Mis Turnos", component: ReservationsCrud }];
 
   const [selected, setSelected] = useState(userMenu[0]);
   const userRole = useSelector((state) => state.userSession.user?.role);
