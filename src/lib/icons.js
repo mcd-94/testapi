@@ -19,6 +19,7 @@ import {
   faUserDoctor,
   faUser,
   faSignIn,
+  faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 
 export {
@@ -41,4 +42,5 @@ export {
   faUserMinus,
   faUserDoctor,
   faUser,
+  faSearch,
 };
