@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import DoctorsCrud from "@/components/DoctorsCrud2/DoctorsCrud";
+import DoctorsCrud from "@/components/DoctorsCrud/DoctorsCrud";
 import HealthInsurancesCrud from "@/components/HealthInsurancesCrud/HealthInsurancesCrud";
 import SpecialtiesCrud from "@/components/SpecialtiesCrud/SpecialtiesCrud";
 import AppointmentsCrud from "@/components/AppointmentsCrud/AppointmentsCrud";
