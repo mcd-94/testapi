@@ -1,3 +1,4 @@
+// comment
 import mongoose from "mongoose";
 
 const SpecialtySchema = new mongoose.Schema(
